@@ -1,6 +1,6 @@
 import React from 'react';
 import Select from 'react-select';
-import { useForm, Controller } from "react-hook-form";
+import { useForm, Controller, get } from "react-hook-form";
 import Card from '~components/Card/Card';
 import FormInputWrapper from '~components/Form/FormInputWrapper/FormInputWrapper';
 import FormLabel from '~components/Form/FormLabel/FormLabel';
@@ -59,6 +59,8 @@ const PPDBPage = () => {
 
     }
   });
+
+  
 
 
   const onSubmit = data => console.log('onSubmit', data);
@@ -508,7 +510,7 @@ const PPDBPage = () => {
                   rules={{ required: true }}
                   render={({ field: { onChange } }) => <input type={'file'} placeholder={'Akte Kelahiran'} onChange={(e) => {
                     console.log('field birthCertificate', e.target.files[0]);
-
+                    onChange(e.target.files[0])
                     // onChange(e)
                   }} />}
                 />
@@ -521,17 +523,28 @@ const PPDBPage = () => {
                 Kartu Keluarga
               </FormLabel>
               <FormInputWrapper>
-                <input onChange={(event) => {
-                  console.log('familyCard', event);
-                  console.log('form', getValues());
-                }} type={'file'} placeholder={'Kartu Keluarga'} />
-                {errors?.familyCard?.type === 'required' && <FormTextError>Kartu Keluarga Wajib diisi</FormTextError>}
+              <Controller
+                  name="familyCard"
+                  control={control}
+                  rules={{ required: true }}
+                  render={({ field: { onChange } }) => <input type={'file'} placeholder={'Kartu Keluarga'} onChange={(e) => {
+                    console.log('field familyCard', e.target.files[0]);
+                    console.log('form values', getValues());
+                    onChange(e.target.files[0])
+                    // onChange(e)
+                  }} />}
+                />
+                {errors?.birthCertificate?.type === 'required' && <FormTextError>Kartu Keluarga Wajib diisi</FormTextError>}
               </FormInputWrapper>
             </FormWrapper>
 
           </Card>
 
-          <Button type='submit' onClick={() => trigger()}>SUBMIT</Button>
+          <div style={{display: 'flex', justifyContent: 'flex-end'}}>
+          <Button shape='default' htmlType='submit' type='primary' onClick={() => trigger()} style={{paddingLeft: 20, paddingRight: 20, paddingTop: 10, paddingBottom: 30}}>SUBMIT</Button>
+
+          </div>
+
         </form>
 
 
