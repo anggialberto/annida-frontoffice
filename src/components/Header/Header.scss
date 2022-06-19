@@ -1,0 +1,89 @@
+header {
+    background: #fff;
+    width: 100%;
+    z-index: 20;
+    color: #839dbc;
+    transition: all .3s ease;
+    box-shadow: 15px 0 25px 0 rgba(200, 219, 239, 0.3);
+    padding-top: 6px;
+
+    .header {
+        &__container {
+            padding-right: 40px;
+            padding-left: 40px;
+            margin-right: auto;
+            margin-left: auto;
+
+            @media (min-width: 768px) {
+                width: 710px;
+                padding-right: 20px;
+                padding-left: 20px;
+            }
+
+            @media (min-width: 992px) {
+                width: 965px;
+            }
+
+            @media (min-width: 1200px) {
+                width: 1140px;
+            }
+    
+            @media (min-width: 1400px) {
+                width: 1240px;
+            }
+        }
+        &__content__wrapper {
+            position: relative;
+            display: flex;
+            width: 100%;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        &__menu {
+            display: block;
+
+            ul.header__menu__item__wrapper {
+
+                display: inline-block;
+                vertical-align: middle;
+                margin: 0;
+                list-style: none;
+                max-height: 460px;
+            }
+
+            &__item {
+                display: inline-block;
+                padding: 50px 0;
+                position: relative;
+
+                a {
+                    position: relative;
+                    font-size: 14px;
+                    text-transform: uppercase;
+                    font-weight: 700;
+                    transition: all .3s ease;
+                    color: #01a23c;
+                    display: inline-block;
+                    line-height: 1;
+                    padding: 10px 13px;
+                    border-radius: 30px;
+                    background-color: transparent;
+                    text-decoration: none;
+                    transition: background-color .2s ease-in-out;
+
+                    &:hover {
+                        background-color: #ecf4fc;
+                    }
+                }
+            }
+        
+        }
+
+        
+
+        
+    }
+
+    
+}

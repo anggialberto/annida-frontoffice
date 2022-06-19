@@ -1,0 +1,9 @@
+.form {
+    &__text {
+        margin: 0;
+        &--error {
+            color: #ea5455;
+            font-size: 0.875rem;
+        }
+    }
+}

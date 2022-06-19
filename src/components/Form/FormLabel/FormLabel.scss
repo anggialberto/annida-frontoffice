@@ -1,0 +1,14 @@
+.form {
+    &__label {
+        width: 100%;
+        color: #626262;
+        text-align: left;
+        font-size: 14px;
+
+        &::after {
+            content: '*';
+            color: #FF0000;
+            margin-left: 10px;
+        }
+    }
+}

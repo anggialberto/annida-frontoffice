@@ -1,0 +1,114 @@
+.banner {
+    // &__home--bg-1 {
+    //     background-image: url("/images/bg-cloud1.png");
+    // }
+
+    // &__home--bg-2 {
+    //     background-image: url("/images/bg-cloud2.png");
+    // }
+
+    &__container {
+        padding-right: 40px;
+        padding-left: 40px;
+        margin-right: auto;
+        margin-left: auto;
+
+
+    }
+
+    @media(min-width:768px) {
+        &__container {
+            width: 710px;
+            padding-right: 20px;
+            padding-left: 20px
+        }
+
+
+    }
+
+    @media(min-width:992px) {
+        &__container {
+            width: 965px
+        }
+    }
+
+    @media(min-width:1200px) {
+        &__container {
+            width: 1140px
+        }
+    }
+
+    @media(min-width:1400px) {
+        &__container {
+            width: 1240px
+        }
+    }
+
+
+
+    &__text {
+        font-size: 20px;
+        font-weight: 700;
+        color: #273f5b;
+        font-family: "Nunito", Arial, "Helvetica Neue", Helvetica, sans-serif;
+        margin: .5em 0;
+        margin-bottom: 0.5em;
+        line-height: 1em;
+        letter-spacing: .02em;
+    }
+
+
+
+    @media(min-width:992px) {
+        &__text {
+            font-size: 48px;
+            font-weight: 700;
+            color: #273f5b;
+            font-family: "Nunito", Arial, "Helvetica Neue", Helvetica, sans-serif;
+            margin: .5em 0;
+            margin-bottom: 0.5em;
+            line-height: 1em;
+            letter-spacing: .02em;
+        }
+    }
+
+
+    &__content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: initial;
+
+        // gap: 60px;
+
+        img {
+            width: 508px !important;
+            height: 718px !important;
+        }
+    }
+
+    @media(min-width:992px) {
+        &__content {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            text-align: initial;
+
+            gap: 60px;
+
+            img {
+                width: 508px !important;
+                height: 718px !important;
+            }
+        }
+    }
+}
+
+.carousel li.dot.selected {
+    width: 50px;
+    border-radius: 20px;
+    background: #01a23c;
+    transition: all .5s ease-in-out;
+}
+
+
