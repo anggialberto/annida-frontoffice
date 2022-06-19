@@ -41,6 +41,17 @@ const PPDBPage = () => {
       motherOccupationDesc: null,
       motherAddress: '',
 
+      mutationIn: null,
+      mutationOut: null,
+      mutationOrigin: '',
+      mutationTo: '',
+      schoolYear: {
+        id: ''
+      },
+      religion: {
+        id: ''
+      },
+
       birthCertificate: null,
       familyCard: null,
 
@@ -143,6 +154,27 @@ const PPDBPage = () => {
 
             <FormWrapper>
               <FormLabel>
+                Agama
+              </FormLabel>
+              <FormInputWrapper>
+                <Controller
+                  name="religion"
+                  control={control}
+                  rules={{ required: true }}
+                  render={({ field }) => <Select placeholder={'Pilih Agama'}
+                    {...field}
+                    options={[
+                      { value: "L", label: "Laki-Laki" },
+                      { value: "P", label: "Perempuan" },
+                    ]}
+                  />}
+                />
+                {errors?.religion?.type === 'required' && <FormTextError>Agama Wajib diisi</FormTextError>}
+              </FormInputWrapper>
+            </FormWrapper>
+
+            <FormWrapper>
+              <FormLabel>
                 Jenis Kelamin
               </FormLabel>
               <FormInputWrapper>
@@ -228,16 +260,62 @@ const PPDBPage = () => {
 
             <FormWrapper>
               <FormLabel>
-                Tempat Lahir
+                Tanggal Masuk
               </FormLabel>
               <FormInputWrapper>
                 <Controller
-                  name="birthPlace"
+                  name="mutationIn"
                   control={control}
                   rules={{ required: true }}
-                  render={({ field }) => <Input placeholder={'Tempat Lahir'} error={!!errors.birthPlace} {...field} />}
+                  render={({ field }) => <Input type={'date'} placeholder={'Tanggal Masuk'} error={!!errors.mutationIn} {...field} />}
                 />
-                {errors?.birthPlace?.type === 'required' && <FormTextError>Tempat Lahir Wajib diisi</FormTextError>}
+                {errors?.mutationIn?.type === 'required' && <FormTextError>Tanggal Masuk Wajib diisi</FormTextError>}
+              </FormInputWrapper>
+            </FormWrapper>
+
+
+            <FormWrapper>
+              <FormLabel>
+                Tanggal Keluar
+              </FormLabel>
+              <FormInputWrapper>
+                <Controller
+                  name="mutationOut"
+                  control={control}
+                  rules={{ required: true }}
+                  render={({ field }) => <Input type={'date'} placeholder={'Tanggal Keluar'} error={!!errors.mutationOut} {...field} />}
+                />
+                {errors?.mutationOut?.type === 'required' && <FormTextError>Tanggal Keluar Wajib diisi</FormTextError>}
+              </FormInputWrapper>
+            </FormWrapper>
+
+            <FormWrapper>
+              <FormLabel>
+                Pindahan dari
+              </FormLabel>
+              <FormInputWrapper>
+                <Controller
+                  name="mutationOrigin"
+                  control={control}
+                  rules={{ required: true }}
+                  render={({ field }) => <Input placeholder={'Pindahan dari'} error={!!errors.mutationOrigin} {...field} />}
+                />
+                {errors?.mutationOrigin?.type === 'required' && <FormTextError>Pindahan dari Wajib diisi</FormTextError>}
+              </FormInputWrapper>
+            </FormWrapper>
+
+            <FormWrapper>
+              <FormLabel>
+                Pindahan ke
+              </FormLabel>
+              <FormInputWrapper>
+                <Controller
+                  name="mutationTo"
+                  control={control}
+                  rules={{ required: true }}
+                  render={({ field }) => <Input placeholder={'Pindahan ke'} error={!!errors.mutationTo} {...field} />}
+                />
+                {errors?.mutationTo?.type === 'required' && <FormTextError>Pindahan ke Wajib diisi</FormTextError>}
               </FormInputWrapper>
             </FormWrapper>
 
