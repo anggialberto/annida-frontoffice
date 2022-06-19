@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Select from 'react-select';
 import { useForm, Controller, get } from "react-hook-form";
 import Card from '~components/Card/Card';
@@ -11,10 +11,15 @@ import PDBBWrapper from '~components/Wrapper/PDDB/PPDBBWrapper';
 import TextArea from '~components/Form/Input/TextArea';
 import RegistrationStatus from '~components/RegistrationStatus/RegistrationStatus';
 import { Button, Modal } from 'antd';
+import axios from 'axios';
+import { getBase64 } from 'src/utils/file';
 // import Modal from 'antd/lib/modal/Modal';
 
 
 const PPDBPage = () => {
+  const [religions, setReligions] = useState([]);
+  const [schoolYears, setSchoolYears] = useState([]);
+
   const { control, trigger, getValues, handleSubmit, formState: { errors } } = useForm({
     mode: 'all',
     shouldFocusError: true,
@@ -45,13 +50,10 @@ const PPDBPage = () => {
       mutationOut: null,
       mutationOrigin: '',
       mutationTo: '',
-      schoolYear: {
-        id: ''
-      },
-      religion: {
-        id: ''
-      },
+      schoolYear: null,
+      religion: null,
 
+      group: '',
       birthCertificate: null,
       familyCard: null,
 
@@ -60,10 +62,82 @@ const PPDBPage = () => {
     }
   });
 
+  useEffect(() => {
+    getAllReligion();
+    getAllSchoolYear();
+  },[])
+
+  const registration = async(data) => {
+    const response = await axios.post('https://3801-180-252-172-105.ap.ngrok.io/annida/registration', data)
+    console.log('response data', response);
+
+  }
+
+  const getRegistrationInfoById = async(id) => {
+    const response = await axios.get(`https://3801-180-252-172-105.ap.ngrok.io/annida/monitoring/registration/${id}`);
+    console.log('response getRegistrationInfoById', response);
+  }
+
+
+  const getAllReligion = async() => {
+      const response = await axios.get('https://3801-180-252-172-105.ap.ngrok.io/annida/religion');
+      if(response.status === 200) {
+        const dataReligion = response.data.data.map((religion) => {
+          return {
+            value: religion.id,
+            label: religion.name
+          }
+        })
+        setReligions(dataReligion)
+      }
+      console.log('response religion', response);
+  }
+
+  const getAllSchoolYear = async() => {
+    const response = await axios.get('https://3801-180-252-172-105.ap.ngrok.io/annida/school-year');
+    if(response.status === 200) {
+      const dataSchoolYear = response.data.data.map((schoolYear) => {
+        return {
+          value: schoolYear.id,
+          label: schoolYear.content
+        }
+      })
+      setSchoolYears(dataSchoolYear)
+    }
+}
   
 
 
-  const onSubmit = data => console.log('onSubmit', data);
+  const onSubmit = async(data) => {
+    let payload = structuredClone(data);
+    const base64birthCertificate = await getBase64(data.birthCertificate);
+    const base64familyCard = await getBase64(data.familyCard);
+
+    payload = {
+      ...payload,
+      bloodType: data.bloodType.value,
+      childStatus: data.childStatus.value,
+      fatherEducation: data.fatherEducation.value,
+      motherEducation: data.motherEducation.value,
+      religion: { id: data.religion.value },
+      schoolYear: { id: data.schoolYear.value },
+      gender: data.gender.value,
+      birthCertificate: {
+        file:base64birthCertificate,
+        name: data.birthCertificate.name,
+        type:data.birthCertificate.type
+      },
+      familyCard: {
+        file:base64familyCard,
+        name: data.birthCertificate.name,
+        type: data.birthCertificate.type
+      },
+      group: data.group.value,
+
+    }
+    await registration(payload);
+    console.log('onSubmit', data);
+  }
 
   return (
     <>
@@ -165,10 +239,7 @@ const PPDBPage = () => {
                   rules={{ required: true }}
                   render={({ field }) => <Select placeholder={'Pilih Agama'}
                     {...field}
-                    options={[
-                      { value: "L", label: "Laki-Laki" },
-                      { value: "P", label: "Perempuan" },
-                    ]}
+                    options={religions}
                   />}
                 />
                 {errors?.religion?.type === 'required' && <FormTextError>Agama Wajib diisi</FormTextError>}
@@ -259,6 +330,47 @@ const PPDBPage = () => {
                 {errors?.address?.type === 'required' && <FormTextError>Alamat Wajib diisi</FormTextError>}
               </FormInputWrapper>
             </FormWrapper>
+
+            <FormWrapper>
+              <FormLabel>
+                Tahun Ajar
+              </FormLabel>
+              <FormInputWrapper>
+                <Controller
+                  name="schoolYear"
+                  control={control}
+                  rules={{ required: true }}
+                  render={({ field }) => <Select placeholder={'Pilih Tahun Ajar'}
+                    {...field}
+                    options={schoolYears}
+                  />}
+                />
+                {errors?.gender?.type === 'required' && <FormTextError>Tahun Ajar Wajib diisi</FormTextError>}
+              </FormInputWrapper>
+            </FormWrapper>
+
+            <FormWrapper>
+              <FormLabel>
+                Grup
+              </FormLabel>
+              <FormInputWrapper>
+                <Controller
+                  name="group"
+                  control={control}
+                  rules={{ required: true }}
+                  render={({ field }) => <Select placeholder={'Pilih grup'}
+                    {...field}
+                    options={[
+                      { value: "TK A", label: "TK A" },
+                      { value: "TK B", label: "TK B" },
+                      { value: "TK C", label: "TK C" },
+                    ]}
+                  />}
+                />
+                {errors?.group?.type === 'required' && <FormTextError>Grup Wajib diisi</FormTextError>}
+              </FormInputWrapper>
+            </FormWrapper>
+
 
             <FormWrapper>
               <FormLabel>
@@ -388,7 +500,19 @@ const PPDBPage = () => {
                   name="fatherOccupation"
                   control={control}
                   rules={{ required: true }}
-                  render={({ field }) => <Input placeholder={'Pekerjaan Ayah'} error={!!errors.fatherOccupation} {...field} />}
+                  render={({ field }) => <Select placeholder={'Pilih pekerjaan ayah'}
+                    {...field}
+                    options={[
+                      { value: "1", label: "Wirausaha" },
+                      { value: "2", label: "Dokter" },
+                      { value: "3", label: "Polisi" },
+                      { value: "4", label: "Guru" },
+                      { value: "5", label: "Tentara" },
+                      { value: "6", label: "Pengacara" },
+                      { value: "7", label: "Ibu Rumah Tangga" },
+                      { value: "8", label: "Sekretaris" },
+                    ]}
+                  />}
                 />
                 {errors?.fatherOccupation?.type === 'required' && <FormTextError>Pekerjaan Ayah Wajib diisi</FormTextError>}
               </FormInputWrapper>
@@ -396,16 +520,16 @@ const PPDBPage = () => {
 
             <FormWrapper>
               <FormLabel>
-                Deskripsi Pendidikan Ayah
+                Deskripsi Pekerjaan Ayah
               </FormLabel>
               <FormInputWrapper>
                 <Controller
                   name="fatherOccupationDesc"
                   control={control}
                   rules={{ required: true }}
-                  render={({ field }) => <TextArea placeholder={'PDeskripsi Pendidikan Ayah'} error={!!errors.fatherOccupationDesc} {...field} />}
+                  render={({ field }) => <TextArea placeholder={'PDeskripsi Pekerjaan Ayah'} error={!!errors.fatherOccupationDesc} {...field} />}
                 />
-                {errors?.fatherOccupationDesc?.type === 'required' && <FormTextError>Deskripsi Pendidikan Ayah Wajib diisi</FormTextError>}
+                {errors?.fatherOccupationDesc?.type === 'required' && <FormTextError>Deskripsi Pekerjaan Ayah Wajib diisi</FormTextError>}
               </FormInputWrapper>
             </FormWrapper>
 
@@ -473,7 +597,19 @@ const PPDBPage = () => {
                   name="motherOccupation"
                   control={control}
                   rules={{ required: true }}
-                  render={({ field }) => <Input placeholder={'Pekerjaan Ibu'} error={!!errors.motherOccupation} {...field} />}
+                  render={({ field }) => <Select placeholder={'Pilih pekerjaan ibu'}
+                    {...field}
+                    options={[
+                      { value: "1", label: "Wirausaha" },
+                      { value: "2", label: "Dokter" },
+                      { value: "3", label: "Polisi" },
+                      { value: "4", label: "Guru" },
+                      { value: "5", label: "Tentara" },
+                      { value: "6", label: "Pengacara" },
+                      { value: "7", label: "Ibu Rumah Tangga" },
+                      { value: "8", label: "Sekretaris" },
+                    ]}
+                  />}
                 />
                 {errors?.motherOccupation?.type === 'required' && <FormTextError>Pekerjaan Ibu Wajib diisi</FormTextError>}
               </FormInputWrapper>
@@ -481,7 +617,7 @@ const PPDBPage = () => {
 
             <FormWrapper>
               <FormLabel>
-                Deskripsi Pendidikan Ibu
+                Deskripsi Pekerjaan Ibu
               </FormLabel>
               <FormInputWrapper>
                 <Controller
