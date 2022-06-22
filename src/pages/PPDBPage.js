@@ -25,7 +25,7 @@ const PPDBPage = () => {
   const [modalPPDB, setModalPPDB] = useState(false);
   const [registrationNumber, setRegistrationNumber] = useState('');
 
-  const { control, trigger, getValues, handleSubmit, formState: { errors } } = useForm({
+  const { control, trigger, getValues, handleSubmit, reset, formState: { errors } } = useForm({
     mode: 'all',
     shouldFocusError: true,
     defaultValues: {
@@ -145,6 +145,8 @@ const PPDBPage = () => {
 
     }
     await registration(payload);
+    message.success('Berhasil melakukan registrasi anak anda di TK Annida 🎉')
+    reset();
     console.log('onSubmit', data);
   }
 
