@@ -7,6 +7,17 @@ function getBase64(file) {
   });
 }  
 
+const downloadFile = async(fileName, fileType, base64) =>{
+  const href = `data:${fileType};base64,${base64}`
+  const link = document.createElement('a');
+  link.href = href;
+  link.download = fileName;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
+
 export {
-  getBase64
+  getBase64,
+  downloadFile
 }

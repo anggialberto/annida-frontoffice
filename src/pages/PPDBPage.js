@@ -10,7 +10,7 @@ import Input from '~components/Form/Input/Input';
 import PDBBWrapper from '~components/Wrapper/PDDB/PPDBBWrapper';
 import TextArea from '~components/Form/Input/TextArea';
 import RegistrationStatus from '~components/RegistrationStatus/RegistrationStatus';
-import { Button, Modal } from 'antd';
+import { Button, message, Modal } from 'antd';
 import axios from 'axios';
 import { getBase64 } from 'src/utils/file';
 // import Modal from 'antd/lib/modal/Modal';
@@ -18,7 +18,12 @@ import { getBase64 } from 'src/utils/file';
 
 const PPDBPage = () => {
   const [religions, setReligions] = useState([]);
+  const [registrationStudent, setRegistrationStudent] = useState();
+  const [errorRegistrationStudent, setErrorRegistrationStudent] = useState();
   const [schoolYears, setSchoolYears] = useState([]);
+  const [modalRegistrationCheck, setModalRegistrationCheck] = useState(false);
+  const [modalPPDB, setModalPPDB] = useState(false);
+  const [registrationNumber, setRegistrationNumber] = useState('');
 
   const { control, trigger, getValues, handleSubmit, formState: { errors } } = useForm({
     mode: 'all',
@@ -65,37 +70,39 @@ const PPDBPage = () => {
   useEffect(() => {
     getAllReligion();
     getAllSchoolYear();
-  },[])
+  }, [])
 
-  const registration = async(data) => {
-    const response = await axios.post('https://3801-180-252-172-105.ap.ngrok.io/annida/registration', data)
+  const registration = async (data) => {
+    const response = await axios.post('https://f27e-180-252-172-105.ap.ngrok.io/annida/registration', data)
     console.log('response data', response);
 
   }
 
-  const getRegistrationInfoById = async(id) => {
-    const response = await axios.get(`https://3801-180-252-172-105.ap.ngrok.io/annida/monitoring/registration/${id}`);
-    console.log('response getRegistrationInfoById', response);
+  const getRegistrationInfoById = async (id) => {
+    const response = await axios.get(`https://f27e-180-252-172-105.ap.ngrok.io/annida/monitoring/registration/${id}`);
+    return response;
   }
 
 
-  const getAllReligion = async() => {
-      const response = await axios.get('https://3801-180-252-172-105.ap.ngrok.io/annida/religion');
-      if(response.status === 200) {
-        const dataReligion = response.data.data.map((religion) => {
-          return {
-            value: religion.id,
-            label: religion.name
-          }
-        })
-        setReligions(dataReligion)
-      }
-      console.log('response religion', response);
+
+
+  const getAllReligion = async () => {
+    const response = await axios.get('https://f27e-180-252-172-105.ap.ngrok.io/annida/religion');
+    if (response.status === 200) {
+      const dataReligion = response.data.data.map((religion) => {
+        return {
+          value: religion.id,
+          label: religion.name
+        }
+      })
+      setReligions(dataReligion)
+    }
+    console.log('response religion', response);
   }
 
-  const getAllSchoolYear = async() => {
-    const response = await axios.get('https://3801-180-252-172-105.ap.ngrok.io/annida/school-year');
-    if(response.status === 200) {
+  const getAllSchoolYear = async () => {
+    const response = await axios.get('https://f27e-180-252-172-105.ap.ngrok.io/annida/school-year');
+    if (response.status === 200) {
       const dataSchoolYear = response.data.data.map((schoolYear) => {
         return {
           value: schoolYear.id,
@@ -104,11 +111,11 @@ const PPDBPage = () => {
       })
       setSchoolYears(dataSchoolYear)
     }
-}
-  
+  }
 
 
-  const onSubmit = async(data) => {
+
+  const onSubmit = async (data) => {
     let payload = structuredClone(data);
     const base64birthCertificate = await getBase64(data.birthCertificate);
     const base64familyCard = await getBase64(data.familyCard);
@@ -119,16 +126,18 @@ const PPDBPage = () => {
       childStatus: data.childStatus.value,
       fatherEducation: data.fatherEducation.value,
       motherEducation: data.motherEducation.value,
+      fatherOccupation: data.fatherOccupation.value,
+      motherOccupation: data.motherOccupation.value,
       religion: { id: data.religion.value },
       schoolYear: { id: data.schoolYear.value },
       gender: data.gender.value,
       birthCertificate: {
-        file:base64birthCertificate,
+        file: base64birthCertificate,
         name: data.birthCertificate.name,
-        type:data.birthCertificate.type
+        type: data.birthCertificate.type
       },
       familyCard: {
-        file:base64familyCard,
+        file: base64familyCard,
         name: data.birthCertificate.name,
         type: data.birthCertificate.type
       },
@@ -146,7 +155,9 @@ const PPDBPage = () => {
           title={'Selamat Datang di PDBB TK Annida'}
           description={'Apabila anda telah melakukan pendaftaran, silahkan klik tombol "Cek Status Pendaftaran"'}
         >
-          <button style={{ width: 'max-content' }} className={'btn btn--purple'}>Cek Status Pendaftaran</button>
+          <button style={{ width: 'max-content' }} className={'btn btn--purple'} onClick={() => {
+            setModalRegistrationCheck(true);
+          }}>Cek Status Pendaftaran</button>
         </Card>
 
         <form onSubmit={handleSubmit(onSubmit)} >
@@ -292,26 +303,23 @@ const PPDBPage = () => {
 
             <FormWrapper>
               <FormLabel>
-                Anak ke-
+                Status Anak
               </FormLabel>
               <FormInputWrapper>
                 <Controller
                   name="childStatus"
                   control={control}
                   rules={{ required: true }}
-                  render={({ field }) => <Select placeholder={'Anak ke-'}
+                  render={({ field }) => <Select placeholder={'Status Anak'}
                     {...field}
                     options={[
-                      { value: "1", label: "1" },
-                      { value: "2", label: "2" },
-                      { value: "3", label: "3" },
-                      { value: "4", label: "4" },
-                      { value: "5", label: "5" },
-                      { value: "6", label: "6" },
+                      { value: 1, label: "Anak Kandung" },
+                      { value: 2, label: "Anak Angkat" },
+                      { value: 3, label: "Anak di Luar Nikah/Kawin" },
                     ]}
                   />}
                 />
-                {errors?.childStatus?.type === 'required' && <FormTextError>Anak ke- Wajib diisi</FormTextError>}
+                {errors?.childStatus?.type === 'required' && <FormTextError>Status anak Wajib diisi</FormTextError>}
               </FormInputWrapper>
             </FormWrapper>
 
@@ -659,7 +667,7 @@ const PPDBPage = () => {
                 Kartu Keluarga
               </FormLabel>
               <FormInputWrapper>
-              <Controller
+                <Controller
                   name="familyCard"
                   control={control}
                   rules={{ required: true }}
@@ -676,8 +684,8 @@ const PPDBPage = () => {
 
           </Card>
 
-          <div style={{display: 'flex', justifyContent: 'flex-end'}}>
-          <Button shape='default' htmlType='submit' type='primary' onClick={() => trigger()} style={{paddingLeft: 20, paddingRight: 20, paddingTop: 10, paddingBottom: 30}}>SUBMIT</Button>
+          <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+            <Button shape='default' htmlType='submit' type='primary' onClick={() => trigger()} style={{ paddingLeft: 20, paddingRight: 20, paddingTop: 10, paddingBottom: 30 }}>SUBMIT</Button>
 
           </div>
 
@@ -685,9 +693,44 @@ const PPDBPage = () => {
 
 
       </PDBBWrapper>
-      {/* <RegistrationStatus /> */}
-      
-      
+      <Modal
+        visible={modalRegistrationCheck}
+        title="Cek Status Pendaftaran"
+        onOk={null}
+        onCancel={null}
+        footer={null}
+      >
+        <label>No Pendaftaran</label>
+        <Input value={registrationNumber} onChange={(e) => setRegistrationNumber(e.target.value)} style={{ width: '100%' }} />
+        {errorRegistrationStudent && <p>{errorRegistrationStudent}</p>}
+        <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: 20, paddingTop: 20 }}>
+          <Button type="primary" onClick={async () => {
+            const response = await getRegistrationInfoById(registrationNumber);
+            console.log('response', response);
+            if (response.data?.data) {
+              setRegistrationStudent(response.data.data);
+              setModalPPDB(true);
+              setModalRegistrationCheck(false);
+              setErrorRegistrationStudent('');
+            } else {
+              setErrorRegistrationStudent('Tidak ditemukan')
+            }
+          }}>Submit</Button>
+          <Button type="ghost" onClick={() => {
+            setErrorRegistrationStudent('');
+            setRegistrationNumber('');
+            setRegistrationStudent({})
+            setModalRegistrationCheck(false);
+          }}>Cancel</Button>
+        </div>
+
+      </Modal>
+      <RegistrationStatus onSubmit={() => {
+        setModalPPDB(false);
+        message.info('Berhasil Memperbaharui data 👍')
+      }} visible={modalPPDB} data={registrationStudent} />
+
+
     </>
   )
 }
