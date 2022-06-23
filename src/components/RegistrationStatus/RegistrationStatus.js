@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Modal, Steps } from 'antd';
+import { Button, Modal, Steps, Tag } from 'antd';
 import './RegistrationStatus.scss';
 import PDBBWrapper from '~components/Wrapper/PDDB/PPDBBWrapper';
 import Card from '~components/Card/Card';
@@ -129,6 +129,8 @@ const RegistrationStatus = (props) => {
 
       setValue('birthCertificate', props.data.studentRegistration.birthCertificate)
       setValue('familyCard', props.data.studentRegistration.familyCard)
+      setValue('proofOfPayment', props.data.studentRegistration.proofOfPayment)
+
 
 
     }
@@ -137,7 +139,7 @@ const RegistrationStatus = (props) => {
 
 
   const getAllReligion = async () => {
-    const response = await axios.get('https://f27e-180-252-172-105.ap.ngrok.io/annida/religion');
+    const response = await axios.get('https://6cfc-180-252-172-105.ap.ngrok.io/annida/religion');
     if (response.status === 200) {
       const dataReligion = response.data.data.map((religion) => {
         return {
@@ -151,7 +153,7 @@ const RegistrationStatus = (props) => {
   }
 
   const getAllSchoolYear = async () => {
-    const response = await axios.get('https://f27e-180-252-172-105.ap.ngrok.io/annida/school-year');
+    const response = await axios.get('https://6cfc-180-252-172-105.ap.ngrok.io/annida/school-year');
     if (response.status === 200) {
       const dataSchoolYear = response.data.data.map((schoolYear) => {
         return {
@@ -164,7 +166,7 @@ const RegistrationStatus = (props) => {
   }
 
   const registration = async (data) => {
-    const response = await axios.put('https://f27e-180-252-172-105.ap.ngrok.io/annida/registration', data)
+    const response = await axios.put('https://6cfc-180-252-172-105.ap.ngrok.io/annida/registration', data)
     console.log('response data', response);
 
   }
@@ -184,6 +186,11 @@ const RegistrationStatus = (props) => {
 
     if(!base64familyCard) {
       base64familyCard = await getBase64(data.familyCard);
+    }
+
+    let base64proofOfPayment = null;
+    if(data?.proofOfPayment) {
+      base64proofOfPayment = await getBase64(data.proofOfPayment);
     }
     
 
@@ -208,6 +215,11 @@ const RegistrationStatus = (props) => {
           name: data.birthCertificate.name,
           type: data.birthCertificate.type
         },
+        proofOfPayment: {
+          file: base64proofOfPayment,
+          name: data.proofOfPayment.name,
+          type: data.proofOfPayment.type
+        },
         group: data.group.value,
       
 
@@ -219,24 +231,80 @@ const RegistrationStatus = (props) => {
 
   const [currentStep, setCurrentStep] = useState(1)
 
+  const status = (text) => {
+    switch (text) {
+      case 0:
+        return {
+          message: 'Waiting Approval Document',
+          color: 'lime'
+        }
+      case 1:
+        return {
+          message: 'Waiting Approval Payment',
+          color: 'lime'
+        }
+      case 2:
+        return {
+          message: 'Approved',
+          color: 'success'
+        }
+      case 3:
+        return {
+          message: 'Reject',
+          color: 'error'
+        }
+      case 4:
+        return {
+          message: 'Pending',
+          color: 'orange'
+        }
+      case 5:
+        return {
+          message: 'Failed',
+          color: 'error'
+        }
+      case 6:
+        return {
+          message: 'Invalid Data',
+          color: 'yellow'
+        }
+      case 7:
+        return {
+          message: 'Document Data has been updated',
+          color: 'blue'
+        }
+      case 8:
+        return {
+          message: 'Payment Data has been updated',
+          color: 'blue'
+        }
+    }
+  }
+
   return (
     <Modal
       title='Proses Pendaftaran'
       width={'90%'}
       visible={props?.visible}
       onOk={{}}
-      onCancel={{}}
+      onCancel={props?.onCancel}
       footer={null}
     >
       <Steps current={ props?.data?.approvalDoc ? 2 : props?.data?.approvalPayment ? 2 : 1 }>
         <Step title="Pendaftaran" description="Pendaftaran anak" status='finish' stepNumber={1} />
-        <Step title="Verifikasi" description="Pemeriksaan Data Pendaftar"  stepNumber={2}/>
+        <Step title="Verifikasi" description={props?.data?.status === 5 ? 'Pendaftaran Gagal' : "Pemeriksaan Data Pendaftar"} status={props?.data?.status === 5 ? 'error' : ""} stepNumber={2}/>
         <Step title="Pembayaran" description="Pembayaran masuk sekolah" stepNumber={3} />
       </Steps>
 
-      {true &&
+      {!props.data?.approvalDoc &&
         <PDBBWrapper>
+          <div style={{display: 'flex', flexDirection: 'row', gap: 50, alignItems: 'center', paddingBottom: 20}}>
+          <p style={{margin: 0, fontWeight: 'bold'}}>Status</p>
+          <Tag color={status(props?.data?.status)?.color}>{status(props?.data?.status)?.message}</Tag>
 
+
+          </div>
+             
 
           <form onSubmit={handleSubmit(onSubmit)}>
             <Card
@@ -732,8 +800,6 @@ const RegistrationStatus = (props) => {
                   />
                 <p onClick={async() => {
                    const birthCertificateFile = getValues('birthCertificate');
-
-
                    downloadFile(birthCertificateFile?.name, birthCertificateFile?.type, birthCertificateFile?.file)
                 }} style={{color: 'blue', cursor: 'pointer', textDecoration: 'underline'}}>{birthCertificateName}</p>
                   {errors?.birthCertificate?.type === 'required' && <FormTextError>Akte Kelahiran Wajib diisi</FormTextError>}
@@ -759,7 +825,7 @@ const RegistrationStatus = (props) => {
                   <p onClick={async() => {
                    const familyCard = getValues('familyCard');
                    downloadFile(familyCard?.name, familyCard?.type, familyCard.file)
-                }} style={{color: 'blue', cursor: 'pointer', textDecoration: 'underline'}}>{getValues('familyCard')?.name}</p>
+                }} style={{color: 'blue', cursor: 'pointer', textDecoration: 'underline'}}>{familyCardName}</p>
                   {errors?.birthCertificate?.type === 'required' && <FormTextError>Kartu Keluarga Wajib diisi</FormTextError>}
                 </FormInputWrapper>
               </FormWrapper>
@@ -767,7 +833,8 @@ const RegistrationStatus = (props) => {
             </Card>
 
             <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-              <Button shape='default' htmlType='submit' type='primary' onClick={() => trigger()} style={{ paddingLeft: 20, paddingRight: 20, paddingTop: 10, paddingBottom: 30 }}>SUBMIT</Button>
+              <Button shape='default' htmlType='submit' type='primary' onClick={() => trigger()} style={{ paddingLeft: 20, paddingRight: 20, paddingTop: 10, paddingBottom: 30 }} 
+              disabled={[4,5].includes(props?.data?.status)}>SUBMIT</Button>
 
             </div>
 
@@ -775,6 +842,61 @@ const RegistrationStatus = (props) => {
 
 
         </PDBBWrapper>
+      }
+
+{!props.data?.approvalPayment && props.data?.approvalDoc &&
+        <PDBBWrapper>
+          <div style={{display: 'flex', flexDirection: 'row', gap: 50, alignItems: 'center', paddingBottom: 20}}>
+          <p style={{margin: 0, fontWeight: 'bold'}}>Status</p>
+          <Tag color={status(props?.data?.status).color}>{status(props?.data?.status).message}</Tag>
+
+
+          </div>
+             
+
+          <form onSubmit={handleSubmit(onSubmit)}>
+          
+
+            <Card
+              title={'Dokumen'}
+            >
+              <FormWrapper>
+                <FormLabel>
+                  Bukti Pembayaran
+                </FormLabel>
+                <FormInputWrapper>
+                  <Controller
+                    name="proofOfPayment"
+                    control={control}
+                    rules={{ required: true }}
+                    render={({ field: { onChange } }) => <input type={'file'} placeholder={'Bukti Pembayaran'} onChange={(e) => {
+                      onChange(e.target.files[0])
+                      // onChange(e)
+                    }} />}
+                  />
+                  {errors?.proofOfPayment?.type === 'required' && <FormTextError>Bukti Pembayaran Wajib diisi</FormTextError>}
+                </FormInputWrapper>
+              </FormWrapper>
+
+        
+              <h3>{props?.data?.reason}</h3>
+            </Card>
+
+            <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+              <Button shape='default' htmlType='submit' type='primary' onClick={() => trigger()} style={{ paddingLeft: 20, paddingRight: 20, paddingTop: 10, paddingBottom: 30 }} 
+              disabled={[4,5].includes(props?.data?.status)}>SUBMIT</Button>
+
+            </div>
+
+          </form>
+
+
+        </PDBBWrapper>
+      }
+
+      { props?.data?.status === 2 && 
+        <h2>Selamat proses pendaftaran telah selesai 🎉🤞🤞</h2>
+
       }
 
 

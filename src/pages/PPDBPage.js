@@ -73,13 +73,13 @@ const PPDBPage = () => {
   }, [])
 
   const registration = async (data) => {
-    const response = await axios.post('https://f27e-180-252-172-105.ap.ngrok.io/annida/registration', data)
+    const response = await axios.post('https://6cfc-180-252-172-105.ap.ngrok.io/annida/registration', data)
     console.log('response data', response);
 
   }
 
   const getRegistrationInfoById = async (id) => {
-    const response = await axios.get(`https://f27e-180-252-172-105.ap.ngrok.io/annida/monitoring/registration/${id}`);
+    const response = await axios.get(`https://6cfc-180-252-172-105.ap.ngrok.io/annida/monitoring/registration/${id}`);
     return response;
   }
 
@@ -87,7 +87,7 @@ const PPDBPage = () => {
 
 
   const getAllReligion = async () => {
-    const response = await axios.get('https://f27e-180-252-172-105.ap.ngrok.io/annida/religion');
+    const response = await axios.get('https://6cfc-180-252-172-105.ap.ngrok.io/annida/religion');
     if (response.status === 200) {
       const dataReligion = response.data.data.map((religion) => {
         return {
@@ -101,7 +101,7 @@ const PPDBPage = () => {
   }
 
   const getAllSchoolYear = async () => {
-    const response = await axios.get('https://f27e-180-252-172-105.ap.ngrok.io/annida/school-year');
+    const response = await axios.get('https://6cfc-180-252-172-105.ap.ngrok.io/annida/school-year');
     if (response.status === 200) {
       const dataSchoolYear = response.data.data.map((schoolYear) => {
         return {
@@ -727,8 +727,12 @@ const PPDBPage = () => {
         </div>
 
       </Modal>
-      <RegistrationStatus onSubmit={() => {
+      <RegistrationStatus onCancel={() => {
         setModalPPDB(false);
+        setRegistrationNumber('')
+      }} onSubmit={() => {
+        setModalPPDB(false);
+        setRegistrationNumber('')
         message.info('Berhasil Memperbaharui data 👍')
       }} visible={modalPPDB} data={registrationStudent} />
 
