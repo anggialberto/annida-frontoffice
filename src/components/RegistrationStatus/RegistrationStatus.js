@@ -139,7 +139,7 @@ const RegistrationStatus = (props) => {
 
 
   const getAllReligion = async () => {
-    const response = await axios.get('https://6cfc-180-252-172-105.ap.ngrok.io/annida/religion');
+    const response = await axios.get('http://localhost:8080/annida/religion');
     if (response.status === 200) {
       const dataReligion = response.data.data.map((religion) => {
         return {
@@ -153,7 +153,7 @@ const RegistrationStatus = (props) => {
   }
 
   const getAllSchoolYear = async () => {
-    const response = await axios.get('https://6cfc-180-252-172-105.ap.ngrok.io/annida/school-year');
+    const response = await axios.get('http://localhost:8080/annida/school-year');
     if (response.status === 200) {
       const dataSchoolYear = response.data.data.map((schoolYear) => {
         return {
@@ -166,7 +166,7 @@ const RegistrationStatus = (props) => {
   }
 
   const registration = async (data) => {
-    const response = await axios.put('https://6cfc-180-252-172-105.ap.ngrok.io/annida/registration', data)
+    const response = await axios.put('http://localhost:8080/annida/registration', data)
     console.log('response data', response);
 
   }

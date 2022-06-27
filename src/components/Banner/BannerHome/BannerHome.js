@@ -16,8 +16,8 @@ const BannerHome = () => {
     >
       <div style={{ background: `url('/images/bg-cloud2.png')` }}>
         <div className={'banner__container'}>
-          <h1 className={'banner__text'}>Selamat Datang di situs TK Annida</h1>
-          <h1 className={'banner__text'}>Resmi TK Annida</h1>
+          <h1 className={'banner__text'}>Selamat Datang di situs Resmi</h1>
+          <h1 className={'banner__text'}>TK Annida</h1>
           <img src="/images/slide1.png" />
         </div>
 

@@ -1,6 +1,7 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
-import Logo from '~assets/images/logo-annida.png'
+// import Logo from '~assets/images/logo-annida.png'
+import Logo from '~assets/images/logo-annida-green-nobg.png'
 import classNames from 'classnames';
 
 
@@ -10,7 +11,7 @@ const HeaderDesktop = () => {
       <div className={'header__content__wrapper'}>
         <div className={'header__container__logo'}>
           <a href='/'></a>
-          <img src={Logo} alt={'logo-tk-annida'} style={{height: '140px'}} />
+          <img src={Logo} alt={'logo-tk-annida'} style={{height: '100px'}} />
         </div>
         <div className={'header__menu'}>
           <ul className={'header__menu__item__wrapper'}>
