@@ -38,6 +38,7 @@ const PPDBPage = () => {
       bloodType: '',
       childStatus: '',
       address: '',
+      phoneNumber: '',
 
       fatherName: '',
       fatherEducation: '',
@@ -154,7 +155,7 @@ const PPDBPage = () => {
     <>
       <PDBBWrapper>
         <Card
-          title={'Selamat Datang di PDBB TK Annida'}
+          title={'Selamat Datang di PPDB TK Annida'}
           description={'Apabila anda telah melakukan pendaftaran, silahkan klik tombol "Cek Status Pendaftaran"'}
         >
           <button style={{ width: 'max-content' }} className={'btn btn--purple'} onClick={() => {
@@ -343,6 +344,21 @@ const PPDBPage = () => {
 
             <FormWrapper>
               <FormLabel>
+                Nomor Telepon
+              </FormLabel>
+              <FormInputWrapper>
+                <Controller
+                  name="phoneNumber"
+                  control={control}
+                  rules={{ required: true }}
+                  render={({ field }) => <Input placeholder={'Nomor Telepon'} error={!!errors.phoneNumber} {...field} />}
+                />
+                {errors?.phoneNumber?.type === 'required' && <FormTextError>Nomor Telepon Wajib diisi</FormTextError>}
+              </FormInputWrapper>
+            </FormWrapper>
+
+            <FormWrapper>
+              <FormLabel>
                 Tahun Ajar
               </FormLabel>
               <FormInputWrapper>
@@ -378,68 +394,6 @@ const PPDBPage = () => {
                   />}
                 />
                 {errors?.group?.type === 'required' && <FormTextError>Grup Wajib diisi</FormTextError>}
-              </FormInputWrapper>
-            </FormWrapper>
-
-
-            <FormWrapper>
-              <FormLabel>
-                Tanggal Masuk
-              </FormLabel>
-              <FormInputWrapper>
-                <Controller
-                  name="mutationIn"
-                  control={control}
-                  rules={{ required: true }}
-                  render={({ field }) => <Input type={'date'} placeholder={'Tanggal Masuk'} error={!!errors.mutationIn} {...field} />}
-                />
-                {errors?.mutationIn?.type === 'required' && <FormTextError>Tanggal Masuk Wajib diisi</FormTextError>}
-              </FormInputWrapper>
-            </FormWrapper>
-
-
-            <FormWrapper>
-              <FormLabel>
-                Tanggal Keluar
-              </FormLabel>
-              <FormInputWrapper>
-                <Controller
-                  name="mutationOut"
-                  control={control}
-                  rules={{ required: true }}
-                  render={({ field }) => <Input type={'date'} placeholder={'Tanggal Keluar'} error={!!errors.mutationOut} {...field} />}
-                />
-                {errors?.mutationOut?.type === 'required' && <FormTextError>Tanggal Keluar Wajib diisi</FormTextError>}
-              </FormInputWrapper>
-            </FormWrapper>
-
-            <FormWrapper>
-              <FormLabel>
-                Pindahan dari
-              </FormLabel>
-              <FormInputWrapper>
-                <Controller
-                  name="mutationOrigin"
-                  control={control}
-                  rules={{ required: true }}
-                  render={({ field }) => <Input placeholder={'Pindahan dari'} error={!!errors.mutationOrigin} {...field} />}
-                />
-                {errors?.mutationOrigin?.type === 'required' && <FormTextError>Pindahan dari Wajib diisi</FormTextError>}
-              </FormInputWrapper>
-            </FormWrapper>
-
-            <FormWrapper>
-              <FormLabel>
-                Pindahan ke
-              </FormLabel>
-              <FormInputWrapper>
-                <Controller
-                  name="mutationTo"
-                  control={control}
-                  rules={{ required: true }}
-                  render={({ field }) => <Input placeholder={'Pindahan ke'} error={!!errors.mutationTo} {...field} />}
-                />
-                {errors?.mutationTo?.type === 'required' && <FormTextError>Pindahan ke Wajib diisi</FormTextError>}
               </FormInputWrapper>
             </FormWrapper>
 
@@ -491,8 +445,11 @@ const PPDBPage = () => {
                   render={({ field }) => <Select placeholder={'Pilih Pendidikan Ayah'}
                     {...field}
                     options={[
-                      { value: "1", label: "SMA" },
-                      { value: "2", label: "S1" },
+                      { value: "1", label: "SMP" },
+                      { value: "2", label: "SMA" },
+                      { value: "3", label: "S1" },
+                      { value: "4", label: "S2" },
+                      { value: "5", label: "S3" },
                     ]}
                   />}
                 />
@@ -521,6 +478,7 @@ const PPDBPage = () => {
                       { value: "6", label: "Pengacara" },
                       { value: "7", label: "Ibu Rumah Tangga" },
                       { value: "8", label: "Sekretaris" },
+                      { value: "9", label: "Lainnya" },
                     ]}
                   />}
                 />
@@ -537,7 +495,7 @@ const PPDBPage = () => {
                   name="fatherOccupationDesc"
                   control={control}
                   rules={{ required: true }}
-                  render={({ field }) => <TextArea placeholder={'PDeskripsi Pekerjaan Ayah'} error={!!errors.fatherOccupationDesc} {...field} />}
+                  render={({ field }) => <TextArea placeholder={'Deskripsi Pekerjaan Ayah'} error={!!errors.fatherOccupationDesc} {...field} />}
                 />
                 {errors?.fatherOccupationDesc?.type === 'required' && <FormTextError>Deskripsi Pekerjaan Ayah Wajib diisi</FormTextError>}
               </FormInputWrapper>
@@ -588,8 +546,11 @@ const PPDBPage = () => {
                   render={({ field }) => <Select placeholder={'Pilih Pendidikan Ibu'}
                     {...field}
                     options={[
-                      { value: "1", label: "SMA" },
-                      { value: "2", label: "S1" },
+                      { value: "1", label: "SMP" },
+                      { value: "2", label: "SMA" },
+                      { value: "3", label: "S1" },
+                      { value: "4", label: "S2" },
+                      { value: "5", label: "S3" },
                     ]}
                   />}
                 />
@@ -618,6 +579,7 @@ const PPDBPage = () => {
                       { value: "6", label: "Pengacara" },
                       { value: "7", label: "Ibu Rumah Tangga" },
                       { value: "8", label: "Sekretaris" },
+                      { value: "9", label: "Lainnya" },
                     ]}
                   />}
                 />
@@ -681,6 +643,67 @@ const PPDBPage = () => {
                   }} />}
                 />
                 {errors?.birthCertificate?.type === 'required' && <FormTextError>Kartu Keluarga Wajib diisi</FormTextError>}
+              </FormInputWrapper>
+            </FormWrapper>
+
+          </Card>
+
+          <Card
+            title={'Data Mutasi'}
+          >
+            <FormWrapper>
+              <FormLabel>
+                Tanggal Masuk Mutasi
+              </FormLabel>
+              <FormInputWrapper>
+                <Controller
+                  name="mutationIn"
+                  control={control}
+                  rules={{ required: false }}
+                  render={({ field }) => <Input type={'date'} placeholder={'Tanggal Masuk Mutasi'} />}
+                />
+              </FormInputWrapper>
+            </FormWrapper>
+
+            <FormWrapper>
+              <FormLabel>
+                Tanggal Keluar Mutasi
+              </FormLabel>
+              <FormInputWrapper>
+                <Controller
+                  name="mutationOut"
+                  control={control}
+                  rules={{ required: false }}
+                  render={({ field }) => <Input type={'date'} placeholder={'Tanggal Keluar Mutasi'} />}
+                />
+              </FormInputWrapper>
+            </FormWrapper>
+
+            <FormWrapper>
+              <FormLabel>
+                Pindahan Mutasi Asal
+              </FormLabel>
+              <FormInputWrapper>
+                <Controller
+                  name="mutationOrigin"
+                  control={control}
+                  rules={{ required: false }}
+                  render={({ field }) => <Input placeholder={'Pindahan Mutasi Asal'} />}
+                />
+              </FormInputWrapper>
+            </FormWrapper>
+
+            <FormWrapper>
+              <FormLabel>
+                Pindahan Mutasi Tujuan
+              </FormLabel>
+              <FormInputWrapper>
+                <Controller
+                  name="mutationTo"
+                  control={control}
+                  rules={{ required: false }}
+                  render={({ field }) => <Input placeholder={'Pindahan Mutasi Tujuan'} />}
+                />
               </FormInputWrapper>
             </FormWrapper>
 

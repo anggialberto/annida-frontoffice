@@ -31,6 +31,7 @@ const RegistrationStatus = (props) => {
       bloodType: '',
       childStatus: '',
       address: '',
+      phoneNumber: '',
 
       fatherName: '',
       fatherEducation: '',
@@ -97,6 +98,7 @@ const RegistrationStatus = (props) => {
       })
 
       setValue('address', props.data.studentRegistration.address)
+      setValue('phoneNumber', props.data.studentRegistration.phoneNumber)
       setValue('schoolYear', {
         value: props.data.studentRegistration.schoolYear.id,
         label: props.data.studentRegistration.schoolYear.content
@@ -487,6 +489,21 @@ const RegistrationStatus = (props) => {
 
               <FormWrapper>
                 <FormLabel>
+                  Nomor Telepon
+                </FormLabel>
+                <FormInputWrapper>
+                  <Controller
+                    name="phoneNumber"
+                    control={control}
+                    rules={{ required: true }}
+                    render={({ field }) => <Input placeholder={'Nomor Telepon'} error={!!errors.phoneNumber} {...field} />}
+                  />
+                  {errors?.phoneNumber?.type === 'required' && <FormTextError>Nomor Telepon Wajib diisi</FormTextError>}
+                </FormInputWrapper>
+              </FormWrapper>
+
+              <FormWrapper>
+                <FormLabel>
                   Tahun Ajar
                 </FormLabel>
                 <FormInputWrapper>
@@ -522,64 +539,6 @@ const RegistrationStatus = (props) => {
                     />}
                   />
                   {errors?.group?.type === 'required' && <FormTextError>Grup Wajib diisi</FormTextError>}
-                </FormInputWrapper>
-              </FormWrapper>
-
-
-              <FormWrapper>
-                <FormLabel>
-                  Tanggal Masuk
-                </FormLabel>
-                <FormInputWrapper>
-                  <Controller
-                    name="mutationIn"
-                    control={control}
-                    render={({ field }) => <Input type={'date'} placeholder={'Tanggal Masuk'} error={!!errors.mutationIn} {...field} />}
-                  />
-                  {errors?.mutationIn?.type === 'required' && <FormTextError>Tanggal Masuk Wajib diisi</FormTextError>}
-                </FormInputWrapper>
-              </FormWrapper>
-
-
-              <FormWrapper>
-                <FormLabel>
-                  Tanggal Keluar
-                </FormLabel>
-                <FormInputWrapper>
-                  <Controller
-                    name="mutationOut"
-                    control={control}
-                    render={({ field }) => <Input type={'date'} placeholder={'Tanggal Keluar'} error={!!errors.mutationOut} {...field} />}
-                  />
-                  {errors?.mutationOut?.type === 'required' && <FormTextError>Tanggal Keluar Wajib diisi</FormTextError>}
-                </FormInputWrapper>
-              </FormWrapper>
-
-              <FormWrapper>
-                <FormLabel>
-                  Pindahan dari
-                </FormLabel>
-                <FormInputWrapper>
-                  <Controller
-                    name="mutationOrigin"
-                    control={control}
-                    render={({ field }) => <Input placeholder={'Pindahan dari'} error={!!errors.mutationOrigin} {...field} />}
-                  />
-                  {errors?.mutationOrigin?.type === 'required' && <FormTextError>Pindahan dari Wajib diisi</FormTextError>}
-                </FormInputWrapper>
-              </FormWrapper>
-
-              <FormWrapper>
-                <FormLabel>
-                  Pindahan ke
-                </FormLabel>
-                <FormInputWrapper>
-                  <Controller
-                    name="mutationTo"
-                    control={control}
-                    render={({ field }) => <Input placeholder={'Pindahan ke'} error={!!errors.mutationTo} {...field} />}
-                  />
-                  {errors?.mutationTo?.type === 'required' && <FormTextError>Pindahan ke Wajib diisi</FormTextError>}
                 </FormInputWrapper>
               </FormWrapper>
 
@@ -829,7 +788,69 @@ const RegistrationStatus = (props) => {
                   {errors?.birthCertificate?.type === 'required' && <FormTextError>Kartu Keluarga Wajib diisi</FormTextError>}
                 </FormInputWrapper>
               </FormWrapper>
+              
               <h3>{props?.data?.reason}</h3>
+            </Card>
+
+            <Card
+              title={'Data Mutasi'}
+            >
+              <FormWrapper>
+                <FormLabel>
+                  Tanggal Masuk Mutasi
+                </FormLabel>
+                <FormInputWrapper>
+                  <Controller
+                    name="mutationIn"
+                    control={control}
+                    rules={{ required: false }}
+                    render={({ field }) => <Input type={'date'} placeholder={'Tanggal Masuk Mutasi'} />}
+                  />
+                </FormInputWrapper>
+              </FormWrapper>
+
+              <FormWrapper>
+                <FormLabel>
+                  Tanggal Keluar Mutasi
+                </FormLabel>
+                <FormInputWrapper>
+                  <Controller
+                    name="mutationOut"
+                    control={control}
+                    rules={{ required: false }}
+                    render={({ field }) => <Input type={'date'} placeholder={'Tanggal Keluar Mutasi'} />}
+                  />
+                </FormInputWrapper>
+              </FormWrapper>
+
+              <FormWrapper>
+                <FormLabel>
+                  Pindahan Mutasi Asal
+                </FormLabel>
+                <FormInputWrapper>
+                  <Controller
+                    name="mutationOrigin"
+                    control={control}
+                    rules={{ required: false }}
+                    render={({ field }) => <Input placeholder={'Pindahan Mutasi Asal'} />}
+                  />
+                </FormInputWrapper>
+              </FormWrapper>
+
+              <FormWrapper>
+                <FormLabel>
+                  Pindahan Mutasi Tujuan
+                </FormLabel>
+                <FormInputWrapper>
+                  <Controller
+                    name="mutationTo"
+                    control={control}
+                    rules={{ required: false }}
+                    render={({ field }) => <Input placeholder={'Pindahan Mutasi Tujuan'} />}
+                  />
+                </FormInputWrapper>
+              </FormWrapper>
+
             </Card>
 
             <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
@@ -860,6 +881,7 @@ const RegistrationStatus = (props) => {
             <Card
               title={'Dokumen'}
             >
+                
               <FormWrapper>
                 <FormLabel>
                   Bukti Pembayaran
@@ -877,9 +899,12 @@ const RegistrationStatus = (props) => {
                   {errors?.proofOfPayment?.type === 'required' && <FormTextError>Bukti Pembayaran Wajib diisi</FormTextError>}
                 </FormInputWrapper>
               </FormWrapper>
-
-        
-              <h3>{props?.data?.reason}</h3>
+              <small>
+                  Selamat data pendaftaran anda telah disetujui, silahkan melakukan pembayaran dengan melakukan transfer ke salah satu dari rekening Yayasan Annida :<br></br> 
+                  Bank Mandiri : 123–1111–222–909<br></br>
+                  Bank BRI : 909–0990–523–282<br></br>
+              </small>
+              <h3>{'Dokumen bukti pembayaran anda telah ditolak dengan alasan : '+props?.data?.reason}</h3>
             </Card>
 
             <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
@@ -895,7 +920,10 @@ const RegistrationStatus = (props) => {
       }
 
       { props?.data?.status === 2 && 
-        <h2>Selamat proses pendaftaran telah selesai 🎉🤞🤞</h2>
+        <p>
+          <h2>Selamat proses pendaftaran telah selesai 🎉🤞🤞</h2>
+          Selanjutnya anda akan dihubungi via telfon untuk informasi lebih lanjut, terima kasih.
+        </p>
 
       }
 
