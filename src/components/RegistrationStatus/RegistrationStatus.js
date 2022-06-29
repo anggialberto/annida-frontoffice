@@ -590,8 +590,11 @@ const RegistrationStatus = (props) => {
                     render={({ field }) => <Select placeholder={'Pilih Pendidikan Ayah'}
                       {...field}
                       options={[
-                        { value: 1, label: "SMA" },
-                        { value: 2, label: "S1" },
+                        { value: 1, label: "SMP" },
+                        { value: 2, label: "SMA" },
+                        { value: 3, label: "S1" },
+                        { value: 4, label: "S2" },
+                        { value: 5, label: "S3" },
                       ]}
                     />}
                   />
@@ -620,6 +623,7 @@ const RegistrationStatus = (props) => {
                         { value: 6, label: "Pengacara" },
                         { value: 7, label: "Ibu Rumah Tangga" },
                         { value: 8, label: "Sekretaris" },
+                        { value: 9, label: "Lainnya" },
                       ]}
                     />}
                   />
@@ -686,8 +690,11 @@ const RegistrationStatus = (props) => {
                     render={({ field }) => <Select placeholder={'Pilih Pendidikan Ibu'}
                       {...field}
                       options={[
-                        { value: "1", label: "SMA" },
-                        { value: "2", label: "S1" },
+                        { value: "1", label: "SMP" },
+                        { value: "2", label: "SMA" },
+                        { value: "3", label: "S1" },
+                        { value: "4", label: "S2" },
+                        { value: "5", label: "S3" },
                       ]}
                     />}
                   />
@@ -716,6 +723,7 @@ const RegistrationStatus = (props) => {
                         { value: "6", label: "Pengacara" },
                         { value: "7", label: "Ibu Rumah Tangga" },
                         { value: "8", label: "Sekretaris" },
+                        { value: "9", label: "Lainnya" },
                       ]}
                     />}
                   />
