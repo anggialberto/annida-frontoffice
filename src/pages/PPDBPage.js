@@ -13,6 +13,7 @@ import RegistrationStatus from '~components/RegistrationStatus/RegistrationStatu
 import { Button, message, Modal } from 'antd';
 import axios from 'axios';
 import { getBase64 } from 'src/utils/file';
+import SuccessModal from '~components/SuccessModal';
 // import Modal from 'antd/lib/modal/Modal';
 
 
@@ -24,6 +25,10 @@ const PPDBPage = () => {
   const [modalRegistrationCheck, setModalRegistrationCheck] = useState(false);
   const [modalPPDB, setModalPPDB] = useState(false);
   const [registrationNumber, setRegistrationNumber] = useState('');
+  const [successRegister, setSuccessRegister] = useState({
+    visible: false,
+    message: null
+  })
 
   const { control, trigger, getValues, handleSubmit, reset, formState: { errors } } = useForm({
     mode: 'all',
@@ -74,13 +79,14 @@ const PPDBPage = () => {
   }, [])
 
   const registration = async (data) => {
-    const response = await axios.post('http://localhost:8080/annida/registration', data)
+    const response = await axios.post('https://3a56-182-0-198-146.ap.ngrok.io/annida/registration', data)
+    return response;
     console.log('response data', response);
 
   }
 
   const getRegistrationInfoById = async (id) => {
-    const response = await axios.get(`http://localhost:8080/annida/monitoring/registration/${id}`);
+    const response = await axios.get(`https://3a56-182-0-198-146.ap.ngrok.io/annida/monitoring/registration/${id}`);
     return response;
   }
 
@@ -88,7 +94,7 @@ const PPDBPage = () => {
 
 
   const getAllReligion = async () => {
-    const response = await axios.get('http://localhost:8080/annida/religion');
+    const response = await axios.get('https://3a56-182-0-198-146.ap.ngrok.io/annida/religion');
     if (response.status === 200) {
       const dataReligion = response.data.data.map((religion) => {
         return {
@@ -102,7 +108,7 @@ const PPDBPage = () => {
   }
 
   const getAllSchoolYear = async () => {
-    const response = await axios.get('http://localhost:8080/annida/school-year');
+    const response = await axios.get('https://3a56-182-0-198-146.ap.ngrok.io/annida/school-year');
     if (response.status === 200) {
       const dataSchoolYear = response.data.data.map((schoolYear) => {
         return {
@@ -145,9 +151,30 @@ const PPDBPage = () => {
       group: data.group.value,
 
     }
-    await registration(payload);
-    message.success('Berhasil melakukan registrasi anak anda di TK Annida 🎉')
-    reset();
+
+    try {
+      const result = await registration(payload);
+      console.log('result', result?.data);
+      if(result?.data?.code >= 400) {
+        message.error('Gagal mendaftar, perhatikan kembali data yang anda buat.')
+      } else {
+        if(result.data?.data?.ticketNumber) {
+          setSuccessRegister({
+            visible: true,
+            message: (
+              <p>Ticket Number : {result.data?.data?.ticketNumber}</p>
+            )
+          })
+        }
+        reset();
+        message.success('Berhasil melakukan registrasi anak anda di TK Annida 🎉')
+      }
+      
+    } catch(e) {
+
+    }
+    
+    
     console.log('onSubmit', data);
   }
 
@@ -759,6 +786,12 @@ const PPDBPage = () => {
         message.info('Berhasil Memperbaharui data 👍')
       }} visible={modalPPDB} data={registrationStudent} />
 
+      <SuccessModal visible={successRegister.visible} message={successRegister?.message} onClose={() => {
+        setSuccessRegister({
+          visible: false,
+          message:null
+        })
+      }} />
 
     </>
   )

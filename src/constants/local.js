@@ -18,5 +18,4 @@ export const CHILD_STATUS = {
     '1': { value: 1, label: 'Anak Kandung' },
     '2': { value: 2, label: 'Anak Angkat' },
     '3': { value: 3, label: 'Anak di Luar Nikah/Kawin' },
-
 }
