@@ -1,16 +1,24 @@
 import React from 'react';
 import './../pages_css/AboutPage.css';
 
+import Card from '~components/Card/Card';
+import activity1 from '../assets/images/activity1.jpeg';
+import activity2 from '../assets/images/activity2.jpeg';
+
 
 const AboutPage = () => {
-
-  // var imageBasePath = "../assets/images/activity1.jpeg";
 
   return (
     <>
       <div className={'about_page'}>
       <div className={'about_activity'}>
-        {/* <img name="photo" src={imageBasePath + props.data.image}></img> */}
+        <div className={'activity1'}>
+          <Card>
+            <h1>Profil TK Annida</h1>
+            <img name="img-activity1" src={ activity1 } style={{ width:'50%', height: '50%', alignSelf:'center' }} ></img>
+            <img name="img-activity2" src={ activity2 } style={{ width:'50%', height: '50%', alignSelf:'center' }}></img>
+          </Card>
+        </div>
       </div>
       <div className={'about_profile'}>
         <div className={'about_side_left'}></div>

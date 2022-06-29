@@ -3,7 +3,12 @@
     position: relative;
 }
 
-.about_activity {
+.activity1 {
+    text-align: center;
+}
+
+.activity1 h1 {
+    color: #485A6F;
 }
 
 .about_profile {
@@ -36,7 +41,7 @@
 
 .about_visionmission {
     padding: 100px;
-    background:linear-gradient(0deg, rgb(0, 0, 0.10), rgba(0, 0, 0, 0.60)), url('../assets/images/activity2.jpeg');
+    background:linear-gradient(0deg, rgb(0, 0, 0.10), rgba(0, 0, 0, 0.60)), url('../assets/images/poto3.jpeg');
     position: relative;
     display: flex;
     flex-direction: row;
