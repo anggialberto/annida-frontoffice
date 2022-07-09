@@ -1,6 +1,9 @@
 export const EDUCATION = {
-    '1': { value: 1, label: 'SMA'},
-    '2': { value: 2, label: 'S1'}
+    '1': { value: 1, label: 'SMP'},
+    '2': { value: 2, label: 'SMA'},
+    '3': { value: 3, label: 'S1'},
+    '4': { value: 4, label: 'S2'},
+    '5': { value: 5, label: 'S3'},
 };
 
 export const OCCUPATION = {
@@ -12,6 +15,7 @@ export const OCCUPATION = {
     '6' : { value: 6, label: "Pengacara" },
     '7' : { value: 7, label: "Ibu Rumah Tangga" },
     '8' : { value: 8, label: "Sekretaris" },
+    '9' : { value: 9, label: "Lainnya" },
 }
 
 export const CHILD_STATUS = {

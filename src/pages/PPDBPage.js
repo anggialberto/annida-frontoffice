@@ -79,22 +79,19 @@ const PPDBPage = () => {
   }, [])
 
   const registration = async (data) => {
-    const response = await axios.post('https://3a56-182-0-198-146.ap.ngrok.io/annida/registration', data)
+    const response = await axios.post('http://localhost:8080/annida/registration', data)
     return response;
     console.log('response data', response);
 
   }
 
   const getRegistrationInfoById = async (id) => {
-    const response = await axios.get(`https://3a56-182-0-198-146.ap.ngrok.io/annida/monitoring/registration/${id}`);
+    const response = await axios.get(`http://localhost:8080/annida/monitoring/registration/${id}`);
     return response;
   }
 
-
-
-
   const getAllReligion = async () => {
-    const response = await axios.get('https://3a56-182-0-198-146.ap.ngrok.io/annida/religion');
+    const response = await axios.get('http://localhost:8080/annida/religion');
     if (response.status === 200) {
       const dataReligion = response.data.data.map((religion) => {
         return {
@@ -108,7 +105,7 @@ const PPDBPage = () => {
   }
 
   const getAllSchoolYear = async () => {
-    const response = await axios.get('https://3a56-182-0-198-146.ap.ngrok.io/annida/school-year');
+    const response = await axios.get('http://localhost:8080/annida/school-year');
     if (response.status === 200) {
       const dataSchoolYear = response.data.data.map((schoolYear) => {
         return {
@@ -162,7 +159,12 @@ const PPDBPage = () => {
           setSuccessRegister({
             visible: true,
             message: (
-              <p>Ticket Number : {result.data?.data?.ticketNumber}</p>
+              <>
+                <p>Ticket Number : {result.data?.data?.ticketNumber}</p>
+                <button onClick={() => {navigator.clipboard.writeText(result.data?.data?.ticketNumber)}}>
+                  Copy Ticket Number to clipboard
+                </button>
+              </>
             )
           })
         }
@@ -678,6 +680,7 @@ const PPDBPage = () => {
           <Card
             title={'Data Mutasi'}
           >
+            <small>Tidak perlu diisi jika bukan siswa/i mutasi atau pindahan</small>
             <FormWrapper>
               <FormLabel>
                 Tanggal Masuk Mutasi
@@ -769,9 +772,10 @@ const PPDBPage = () => {
             }
           }}>Submit</Button>
           <Button type="ghost" onClick={() => {
-            setErrorRegistrationStudent('');
-            setRegistrationNumber('');
-            setRegistrationStudent({})
+            // is it good comment 3 lines below?
+            // setErrorRegistrationStudent('');
+            // setRegistrationNumber('');
+            // setRegistrationStudent({})
             setModalRegistrationCheck(false);
           }}>Cancel</Button>
         </div>

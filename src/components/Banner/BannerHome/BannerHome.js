@@ -1,4 +1,5 @@
 import React from 'react';
+import {Link} from 'react-router-dom';
 import { Carousel } from 'react-responsive-carousel';
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import './BannerHome.scss';
@@ -28,7 +29,8 @@ const BannerHome = () => {
             <img src="/images/slide2.png" style={{ height: 'auto', maxWidth: '100%' }} />
             <div className={'banner__ppdb__navigation'}>
               <h1>PPDB TK ANNIDA</h1>
-              <a className='btn btn--green btn--with-shadow'>DAFTAR SEKARANG</a>
+              <Link to={'/ppdb'} className='btn btn--green btn--with-shadow'>DAFTAR SEKARANG</Link>
+              {/* <a className='btn btn--green btn--with-shadow'>DAFTAR SEKARANG</a> */}
             </div>
           
           </div>

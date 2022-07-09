@@ -141,7 +141,7 @@ const RegistrationStatus = (props) => {
 
 
   const getAllReligion = async () => {
-    const response = await axios.get('https://3a56-182-0-198-146.ap.ngrok.io/annida/religion');
+    const response = await axios.get('http://localhost:8080/annida/religion');
     if (response.status === 200) {
       const dataReligion = response.data.data.map((religion) => {
         return {
@@ -155,7 +155,7 @@ const RegistrationStatus = (props) => {
   }
 
   const getAllSchoolYear = async () => {
-    const response = await axios.get('https://3a56-182-0-198-146.ap.ngrok.io/annida/school-year');
+    const response = await axios.get('http://localhost:8080/annida/school-year');
     if (response.status === 200) {
       const dataSchoolYear = response.data.data.map((schoolYear) => {
         return {
@@ -168,7 +168,7 @@ const RegistrationStatus = (props) => {
   }
 
   const registration = async (data) => {
-    const response = await axios.put('https://3a56-182-0-198-146.ap.ngrok.io/annida/registration', data)
+    const response = await axios.put('http://localhost:8080/annida/registration', data)
     console.log('response data', response);
 
   }
@@ -912,7 +912,11 @@ const RegistrationStatus = (props) => {
                   Bank Mandiri : 123–1111–222–909<br></br>
                   Bank BRI : 909–0990–523–282<br></br>
               </small>
-              <h3>{'Dokumen bukti pembayaran anda telah ditolak dengan alasan : '+props?.data?.reason}</h3>
+              <h3>
+                {
+                // 'Dokumen bukti pembayaran anda telah ditolak dengan alasan : '+
+                props?.data?.reason}
+                </h3>
             </Card>
 
             <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
